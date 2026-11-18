@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T23:10:31Z",
+ "updatedAt": "2026-11-18T23:14:04Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -26,10 +26,76 @@
    "count": 100
   },
   {
+   "name": "Google News: Microsoft on reuters.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 100
+  },
+  {
+   "name": "Google News: Microsoft on bloomberg.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 100
+  },
+  {
+   "name": "Google News: Microsoft on wsj.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 46
+  },
+  {
+   "name": "Google News: Microsoft on ft.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 30
+  },
+  {
+   "name": "Google News: Microsoft on cnbc.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 47
+  },
+  {
+   "name": "Google News: Microsoft on theinformation.com",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 20
+  },
+  {
    "name": "https://blogs.microsoft.com/feed/",
    "ticker": "MSFT",
    "ok": true,
    "count": 10
+  },
+  {
+   "name": "CNBC Technology",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 1
+  },
+  {
+   "name": "TechCrunch",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 1
+  },
+  {
+   "name": "The Verge",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 1
+  },
+  {
+   "name": "Ars Technica",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 1
+  },
+  {
+   "name": "The Register",
+   "ticker": "MSFT",
+   "ok": true,
+   "count": 4
   },
   {
    "name": "SEC EDGAR",
