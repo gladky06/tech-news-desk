@@ -92,6 +92,9 @@ svg{display:block;width:100%;overflow:visible}
 .story .m{grid-column:2;font-size:12px;color:var(--muted);display:flex;gap:6px 10px;flex-wrap:wrap;align-items:center}
 .story .why{grid-column:2;font-size:12px;color:var(--muted);margin-top:2px}
 .story .why b{color:var(--text);font-weight:500}
+.chip.more{cursor:pointer;color:var(--text)}
+.rel{grid-column:2;margin-top:8px;border-left:2px solid var(--line);padding-left:12px;display:grid;gap:7px}
+.rel a{font-size:13px;font-weight:500;display:block}.rel a:hover{text-decoration:underline}.rel span{font-size:11px;color:var(--muted)}
 .chip{font-size:11px;padding:1px 7px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
 .add{grid-row:1/4;grid-column:3;align-self:start;border:1px solid var(--line);border-radius:8px;width:30px;height:30px;color:var(--muted);font-size:16px;line-height:1}
 .add.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -113,7 +116,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint);display:flex;gap:6px 16
 .srcs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .srcs span{font-size:11px;padding:2px 7px;border:1px solid var(--line);border-radius:6px;color:var(--muted)}
 .srcs span.bad{color:var(--down);border-color:var(--down)}
-@media (max-width:860px){.hero,.grid{grid-template-columns:1fr}.side{position:static}.px{font-size:38px}.badge{width:auto}.story{grid-template-columns:1fr auto}.badge{grid-column:1;grid-row:auto;justify-self:start}.story .t,.story .m,.story .why{grid-column:1}.add{grid-column:2;grid-row:1/3}.wrap{padding:0 16px 90px}}
+@media (max-width:860px){.hero,.grid{grid-template-columns:1fr}.side{position:static}.px{font-size:38px}.badge{width:auto}.story{grid-template-columns:1fr auto}.badge{grid-column:1;grid-row:auto;justify-self:start}.story .t,.story .m,.story .why,.rel{grid-column:1}.add{grid-column:2;grid-row:1/3}.wrap{padding:0 16px 90px}}
 </style>
 </head>
 <body>
@@ -168,7 +171,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint);display:flex;gap:6px 16
 const $=id=>document.getElementById(id), el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const S={news:null,status:null,ticker:store.get("ticker",null),view:"material",driver:null,day:null,q:"",sel:-1,
-  picked:new Set(store.get("picked",[])),lastVisit:store.get("lastVisit",0),visible:[]};
+  picked:new Set(store.get("picked",[])),open:new Set(),lastVisit:store.get("lastVisit",0),visible:[]};
 const fmtPct=v=>v==null?"n/a":(v>0?"+":"")+v.toFixed(2)+"%", cls=v=>v==null?"":v>=0?"up":"down";
 const ET=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"});
 const dayOf=iso=>ET.format(new Date(iso));
@@ -222,7 +225,7 @@ function renderPrice(){
 function renderChart(){
   const p=(S.status.prices||{})[S.ticker], host=$("chart");host.replaceChildren();
   if(!p||!p.series||p.series.length<3){host.append(el("div","empty","Chart appears after the first price update"));return}
-  const ser=p.series, W=host.clientWidth||700, H=200, padL=6, padR=46, padT=14, padB=22;
+  const ser=p.series, W=host.clientWidth||700, H=Math.max(220,Math.min(340,(document.getElementById("pricecard").offsetHeight||300)-78)), padL=6, padR=46, padT=14, padB=22;
   const cs=ser.map(s=>s.c), lo=Math.min(...cs), hi=Math.max(...cs), span=(hi-lo)||1;
   const x=i=>padL+i*(W-padL-padR)/(ser.length-1), y=v=>padT+(1-(v-lo)/span)*(H-padT-padB);
   const NS="http://www.w3.org/2000/svg", mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
@@ -293,11 +296,15 @@ function renderFeed(){
     const a=el("a","t",n.title);a.href=n.url;a.target="_blank";a.rel="noopener";s.append(a);
     const m=el("div","m");m.append(el("span","",n.source||"Unknown source"));
     if(n.tier==="top")m.append(el("span","pill tier","Top source"));
-    if(n.sourceCount>1){const c=el("span","chip","+"+(n.sourceCount-1)+" more");c.title=(n.sources||[]).join(", ");m.append(c)}
+    if(n.paywall)m.append(el("span","pill","Paywall"));
+    const rel=n.related||[];
+    if(n.sourceCount>1||rel.length){const c=el("button","chip more",(n.sourceCount>1?n.sourceCount+" outlets":"")+(rel.length?(n.sourceCount>1?" · ":"")+rel.length+" related":"")+(S.open.has(n.id)?"  ▴":"  ▾"));c.title=(n.sources||[]).join(", ");
+      c.onclick=()=>{S.open.has(n.id)?S.open.delete(n.id):S.open.add(n.id);renderFeed()};m.append(c)}
     m.append(el("span","num",ago(n.publishedAt)));
     if(new Date(n.firstSeen||n.publishedAt)>S.lastVisit&&S.lastVisit)m.append(el("span","pill new","New"));
     s.append(m);
     if(n.drivers.length){const w=el("div","why");w.append("Touches ");n.drivers.slice(0,3).forEach((id,k)=>{if(k)w.append(", ");w.append(el("b","",drv(id).assumption))});s.append(w)}
+    if(S.open.has(n.id)&&rel.length){const box=el("div","rel");rel.forEach(r=>{const a=el("a","",r.title);a.href=r.url;a.target="_blank";a.rel="noopener";const row=el("div");row.append(a,el("span","",(r.source||"")+(r.paywall?" · paywall":"")));box.append(row)});s.append(box)}
     const add=el("button","add"+(S.picked.has(n.id)?" on":""),S.picked.has(n.id)?"✓":"+");add.title="Add to weekly brief";
     add.onclick=()=>{S.picked.has(n.id)?S.picked.delete(n.id):S.picked.add(n.id);store.set("picked",[...S.picked]);renderFeed();fabLabel()};s.append(add);
     feed.append(s)});

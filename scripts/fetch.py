@@ -215,6 +215,55 @@ def cluster(items, skip=frozenset()):
     return groups
 
 
+def thread_tokens(title, skip):
+    return {re.sub(r"(?<=[a-z]{3})s$", "", w) for w in tokens(title)} - skip
+
+
+def build_threads(clusters, co, cfg):
+    """Second pass: folds different headlines about the same event into one story.
+    Two headlines belong together when they share at least two uncommon words."""
+    import math
+    skip = set(co["aliases"]) | set(cfg.get("thread_stopwords", []))
+    for c in clusters:
+        c["_tt"] = thread_tokens(c["title"], skip)
+    n = max(len(clusters), 2)
+    df = {}
+    for c in clusters:
+        for w in c["_tt"]:
+            df[w] = df.get(w, 0) + 1
+    idf = lambda w: math.log(n / df[w])
+    need = max(5.0, 1.15 * math.log(n))
+    threads = []
+    for c in sorted(clusters, key=lambda x: -x["_base"]):
+        hit = None
+        for th in threads:
+            seed = th[0]
+            if abs((c["publishedAt"] - seed["publishedAt"]).total_seconds()) > 72 * 3600:
+                continue
+            shared = c["_tt"] & seed["_tt"]
+            if len(shared) >= 2 and sum(idf(w) for w in shared) >= need and bool(c.get("form")) == bool(seed.get("form")):
+                hit = th
+                break
+        if hit:
+            hit.append(c)
+        else:
+            threads.append([c])
+    return threads
+
+
+def pick_display(alts, cfg):
+    """Best link to show: top-tier and free first, then top-tier paywalled, then the rest."""
+    t = cfg.get("source_tiers", {})
+    pay = cfg.get("paywalled", [])
+    def rank(a):
+        s = a["source"].lower()
+        top = any(k in s for k in t.get("top", []))
+        low = any(k in s for k in t.get("low", []))
+        paid = any(k in s for k in pay)
+        return (0 if top and not paid else 1 if top else 3 if low else 2, -a["base"], a["when"])
+    return sorted(alts, key=rank)[0]
+
+
 # ---------- prices ----------
 
 def fetch_price(ticker):
@@ -290,32 +339,50 @@ def build(cfg, fetch=http_get, now=None):
                 status["sources"].append({"name": name, "ticker": co["ticker"], "ok": False, "error": str(e)[:160]})
             time.sleep(0.4)
         raw = [r for r in raw if r["publishedAt"] and r["publishedAt"] > now - timedelta(days=4) and r["publishedAt"] <= now + timedelta(hours=1)]
+        clusters = []
         for it in cluster(raw, frozenset(co["aliases"])):
-            sc, drivers, noise = score_item(it, co, cfg)
-            if len(it["sources"]) >= 3:
-                sc += 1
-            if len(it["sources"]) >= 6:
-                sc += 1
-            tier = tier_of(it["sources"], cfg)
-            sc += TIER_ADJ[tier]
-            if tier == "top":  # show the strongest outlet's link and headline
-                tops = cfg["source_tiers"]["top"]
-                best = next((a for a in it["_alts"] if any(k in a[0].lower() for k in tops)), None)
-                if best:
-                    it["sources"] = [best[0]] + [x for x in it["sources"] if x != best[0]]
-                    it["url"] = best[1]
-            if noise or sc < 0:
+            base, drivers, noise = score_item(it, co, cfg)
+            if noise or base < 0:
                 continue  # listicles, how-tos and off-topic stories are dropped
-            iid = hashlib.sha1((co["ticker"] + norm_title(it["title"])).encode()).hexdigest()[:14]
-            for m in it["_members"]:  # ids of headlines folded into this story
-                mid = hashlib.sha1((co["ticker"] + m).encode()).hexdigest()[:14]
-                if mid != iid:
-                    absorbed.add(mid)
-            fresh.append({"id": iid, "ticker": co["ticker"], "title": it["title"], "url": it["url"],
-                          "source": it["sources"][0] if it["sources"] else "", "sources": it["sources"][:8],
-                          "sourceCount": len(it["sources"]), "publishedAt": iso(it["publishedAt"]),
-                          "summary": it.get("summary", ""), "drivers": drivers, "score": sc,
-                          "materiality": level(sc, cfg), "form": it.get("form", ""), "tier": tier})
+            it["_base"], it["_drivers"] = base, drivers
+            clusters.append(it)
+        pay = cfg.get("paywalled", [])
+        sha = lambda t: hashlib.sha1((co["ticker"] + norm_title(t)).encode()).hexdigest()[:14]
+        for th in build_threads(clusters, co, cfg):
+            seed = th[0]
+            alts, seen = [], set()
+            for c in th:
+                for src, url, title in c["_alts"]:
+                    key = (src, norm_title(title))
+                    if key not in seen:
+                        seen.add(key)
+                        alts.append({"source": src, "url": url, "title": title, "base": c["_base"], "when": c["publishedAt"]})
+            sources = list(dict.fromkeys(a["source"] for a in alts if a["source"]))
+            show = pick_display(alts, cfg)
+            sources = [show["source"]] + [x for x in sources if x != show["source"]] if show["source"] else sources
+            tier = tier_of(sources, cfg)
+            sc = seed["_base"] + (len(sources) >= 3) + (len(sources) >= 6) + TIER_ADJ[tier]
+            first = min(th, key=lambda c: c["publishedAt"])
+            iid = sha(first["title"])
+            for c in th:
+                for m in c["_members"]:
+                    mid = hashlib.sha1((co["ticker"] + m).encode()).hexdigest()[:14]
+                    if mid != iid:
+                        absorbed.add(mid)
+            related, rseen = [], {norm_title(show["title"])}
+            for a in sorted(alts, key=lambda a: (-a["base"], a["when"])):
+                k = norm_title(a["title"])
+                if k in rseen:
+                    continue
+                rseen.add(k)
+                related.append({"title": a["title"], "source": a["source"], "url": a["url"],
+                                "paywall": any(p in a["source"].lower() for p in pay)})
+            fresh.append({"id": iid, "ticker": co["ticker"], "title": show["title"], "url": show["url"],
+                          "source": show["source"], "sources": sources[:12], "sourceCount": len(sources),
+                          "publishedAt": iso(max(c["publishedAt"] for c in th)), "summary": seed.get("summary", ""),
+                          "drivers": seed["_drivers"], "score": round(sc, 1), "materiality": level(sc, cfg),
+                          "form": seed.get("form", ""), "tier": tier, "scoreTitle": seed["title"],
+                          "paywall": any(p in show["source"].lower() for p in pay), "related": related[:10]})
         try:
             status["prices"][co["ticker"]] = fetch_price(co["ticker"]) if fetch is http_get else status["prices"].get(co["ticker"], {})
         except Exception as e:
@@ -324,8 +391,6 @@ def build(cfg, fetch=http_get, now=None):
         prev = by_id.get(it["id"])
         if prev:  # keep first-seen time and the widest source list
             it["firstSeen"] = prev.get("firstSeen", iso(now))
-            merged = list(dict.fromkeys(prev.get("sources", []) + it["sources"]))[:8]
-            it["sources"], it["sourceCount"] = merged, max(len(merged), prev.get("sourceCount", 1), it["sourceCount"])
         else:
             it["firstSeen"] = iso(now)
         by_id[it["id"]] = it
@@ -336,7 +401,7 @@ def build(cfg, fetch=http_get, now=None):
         co = cos.get(it["ticker"])
         if not co:
             continue
-        sc, drivers, noise = score_item(it, co, cfg)
+        sc, drivers, noise = score_item(dict(it, title=it.get("scoreTitle", it["title"])), co, cfg)
         n = it.get("sourceCount", 1)
         it["tier"] = tier_of(it.get("sources", []), cfg)
         sc += (n >= 3) + (n >= 6) + TIER_ADJ[it["tier"]]
