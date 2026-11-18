@@ -41,6 +41,18 @@ a{color:inherit;text-decoration:none}
 .primary{background:var(--brand);color:var(--brand-ink);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600}
 .primary:hover{filter:brightness(1.07)}
 
+.digest{margin-top:14px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.digest:empty{display:none}
+.digest h2{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.digest .lead{font-size:19px;line-height:1.45;font-weight:500;letter-spacing:-.01em;margin:0;max-width:62em}
+.digest .lead span{color:var(--muted);font-weight:400}
+.digest ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.digest li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:0 8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.digest li svg{width:18px;height:14px;margin-top:4px}
+.digest li a{font-size:16px;font-weight:600;line-height:1.3}
+.digest li a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.digest li small{display:block;font-size:13px;color:var(--muted);margin-top:3px}.digest li small b{color:var(--text);font-weight:500}
+.digest .foot{font-size:14px;color:var(--muted);margin:14px 0 0;max-width:62em}.digest .foot b{color:var(--text);font-weight:500}
 .hero{padding:26px 0 8px}
 .herohead{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .co{font-size:14px;color:var(--muted);font-weight:500}.co b{color:var(--text);font-weight:600}
@@ -121,7 +133,7 @@ kbd{font:500 11px Geist,sans-serif;border:1px solid var(--line);border-radius:5p
 .row input{background:var(--raised);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:6px 8px;font:inherit;font-size:14px}
 .row .sp{flex:1}
 textarea{width:100%;min-height:240px;background:var(--raised);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:14px;font:14px/1.55 Geist,sans-serif;resize:vertical}
-@media (max-width:920px){.cols{grid-template-columns:1fr;gap:28px}aside{position:static}.wrap{padding:0 18px 96px}.px{font-size:44px}
+@media (max-width:920px){.cols{grid-template-columns:1fr;gap:28px}aside{position:static}.wrap{padding:0 18px 96px}.px{font-size:44px}.digest{padding:18px}.digest .lead{font-size:17px}
 .stats{grid-template-columns:1fr 1fr;border-bottom:0}.stats .stat{padding:12px 0;border-left:0;border-bottom:1px solid var(--line)}.stats .stat:nth-child(even){padding-left:16px;border-left:1px solid var(--line)}.stats .stat:last-child:nth-child(odd){grid-column:1/3}.legend{flex-wrap:wrap;gap:6px 16px}
 .status span.txt{display:none}.story{grid-template-columns:44px minmax(0,1fr) 32px}.top{gap:10px}#briefbtn{position:fixed;right:16px;bottom:16px;z-index:20;padding:12px 18px;border-radius:999px;box-shadow:var(--shadow)}}
 @media (prefers-reduced-motion:no-preference){.story,.drv,.tab,.seg button{transition:background .12s}}
@@ -136,6 +148,8 @@ textarea{width:100%;min-height:240px;background:var(--raised);border:1px solid v
     <button class="primary" id="briefbtn">Weekly brief</button>
     <button class="ghost" id="theme" aria-label="Switch between light and dark">Theme</button>
   </header>
+
+  <section class="digest" id="digest" aria-label="Summary"></section>
 
   <section class="hero">
     <div class="herohead"><div id="pricehead"></div><div class="ranges" id="ranges"></div></div>
@@ -204,9 +218,42 @@ function render(){
   const mins=(Date.now()-new Date(S.status.updatedAt))/60000;
   $("dot").className="dot "+(mins<75?"ok":"stale");
   $("updated").textContent="Updated "+ago(S.status.updatedAt);
-  renderHead();renderChart();renderRadar();renderTheses();renderFeed();renderSources();
+  renderDigest();renderHead();renderChart();renderRadar();renderTheses();renderFeed();renderSources();
 }
 
+function listWords(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]}
+function renderDigest(){
+  const box=$("digest"), p=price(), c=company(), all=items();box.replaceChildren();
+  if(!all.length&&!(p&&p.price))return;
+  box.append(el("h2","","What is going on"));
+  const lead=el("p","lead");
+  if(p&&p.price){
+    const dir=p.d1==null?"closed":p.d1>0.05?"rose "+p.d1.toFixed(2)+"%":p.d1<-0.05?"fell "+Math.abs(p.d1).toFixed(2)+"%":"was flat";
+    lead.append(c.name+" "+(dir==="closed"?"closed":dir)+(dir==="closed"?"":" to")+" $"+p.price.toFixed(2)+" on "+shortD(p.date)+". ");
+    const bits=[];
+    if(p.d5!=null)bits.push((p.d5>=0?"up ":"down ")+Math.abs(p.d5).toFixed(1)+"% over 5 days");
+    if(c.model&&c.model.target){const u=(c.model.target/p.price-1)*100;bits.push(Math.abs(u).toFixed(1)+"% "+(u>=0?"below":"above")+" the fund target of $"+c.model.target.toFixed(2))}
+    if(bits.length)lead.append(el("span","","It is "+listWords(bits)+"."));
+  }
+  box.append(lead);
+  const cut=Date.now()-48*36e5, recent=all.filter(i=>new Date(i.publishedAt)>=cut);
+  let top=recent.filter(i=>i.materiality==="high").sort((a,b)=>b.score-a.score).slice(0,3), label="";
+  if(!top.length){top=recent.filter(isMat).sort((a,b)=>b.score-a.score).slice(0,2);label=top.length?"Nothing high materiality in the last 2 days. The strongest stories are below.":"No material stories in the last 2 days."}
+  if(label)box.append(el("p","foot",label));
+  if(top.length){const ul=el("ul");top.forEach(n=>{const li=el("li");li.append(bars(n.materiality));const d=el("div"),a=el("a","",n.title);a.href=n.url;a.target="_blank";a.rel="noopener";
+      const sm=el("small");sm.append((n.source||"Unknown outlet")+(n.sourceCount>1?" and "+(n.sourceCount-1)+" more "+(n.sourceCount===2?"outlet":"outlets"):"")+", "+ago(n.publishedAt)+". ");
+      if(n.drivers.length){sm.append("Touches ");sm.append(el("b","",listWords(n.drivers.slice(0,2).map(id=>drv(id).assumption))));sm.append(".")}
+      d.append(a,sm);li.append(d);ul.append(li)});box.append(ul)}
+  const wk=weekItems(), foot=el("p","foot");
+  const heat=S.news.meta.drivers.map(d=>({d,h:wk.filter(i=>i.drivers.includes(d.id)).reduce((a,i)=>a+i.score,0)})).filter(r=>r.h>0).sort((a,b)=>b.h-a.h).slice(0,2);
+  if(heat.length){foot.append("This week the news leaned hardest on ");foot.append(el("b","",listWords(heat.map(r=>r.d.assumption))));foot.append(". ")}
+  const m=c.model;if(m&&m.theses){const hot=m.theses.filter(t=>wk.some(i=>i.materiality==="high"&&i.drivers.some(d=>t.drivers.includes(d))));
+    if(hot.length){foot.append((hot.length===1?"One thesis has":hot.length+" theses have")+" high materiality stories to review: ");foot.append(el("b","",listWords(hot.map(t=>t.name))));foot.append(". ")}
+    else foot.append("No thesis has high materiality stories this week. ")}
+  const fresh=S.lastVisit?all.filter(i=>new Date(i.firstSeen||i.publishedAt)>S.lastVisit).length:0;
+  if(fresh)foot.append(fresh+(fresh===1?" story is":" stories are")+" new since your last visit.");
+  if(foot.childNodes.length)box.append(foot);
+}
 function renderHead(){
   const p=price(), c=company(), h=$("pricehead"), st=$("stats");h.replaceChildren();st.replaceChildren();
   const co=el("div","co");co.append(el("b","",c.name),"  "+c.ticker);h.append(co);
