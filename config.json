@@ -1,0 +1,265 @@
+{
+  "site_title": "Tech News Desk",
+  "keep_days": 45,
+  "max_items": 1500,
+  "contact": "tech-news-desk (github.com/gladky06/tech-news-desk)",
+  "companies": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "aliases": [
+        "microsoft",
+        "msft",
+        "azure",
+        "copilot",
+        "nadella"
+      ],
+      "queries": [
+        "Microsoft",
+        "MSFT stock",
+        "Microsoft Azure",
+        "Microsoft Copilot OR OpenAI"
+      ],
+      "cik": "0000789019",
+      "feeds": [
+        "https://blogs.microsoft.com/feed/"
+      ],
+      "model": {
+        "target": 587.81,
+        "target_label": "TCF target",
+        "target_date": "2026-11-08",
+        "theses": [
+          {
+            "name": "Rapid Growth in Cloud Services",
+            "drivers": [
+              "azure",
+              "ai_customers",
+              "capex"
+            ]
+          },
+          {
+            "name": "Steady Margins",
+            "drivers": [
+              "margins",
+              "capex",
+              "guidance"
+            ]
+          },
+          {
+            "name": "Resilient Stock in Economic Downturn",
+            "drivers": [
+              "m365",
+              "reliability",
+              "regulation"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "drivers": [
+    {
+      "id": "guidance",
+      "label": "Earnings and guidance",
+      "assumption": "Revenue growth and margin forecast",
+      "weight": 4,
+      "patterns": [
+        "guidance",
+        "outlook",
+        "earnings",
+        "quarterly results",
+        "raises forecast",
+        "cuts forecast",
+        "beats estimates",
+        "misses estimates",
+        "fiscal q[1-4]"
+      ]
+    },
+    {
+      "id": "azure",
+      "label": "Azure and cloud demand",
+      "assumption": "Intelligent Cloud revenue growth",
+      "weight": 3,
+      "patterns": [
+        "azure",
+        "cloud revenue",
+        "cloud growth",
+        "remaining performance obligation",
+        "\\brpo\\b",
+        "bookings",
+        "backlog",
+        "compute commitment",
+        "cloud contract",
+        "cloud deal",
+        "capacity constrain"
+      ]
+    },
+    {
+      "id": "ai_customers",
+      "label": "OpenAI, Anthropic and AI customers",
+      "assumption": "Azure growth and the OpenAI stake value",
+      "weight": 3,
+      "patterns": [
+        "openai",
+        "anthropic",
+        "\\bxai\\b",
+        "mistral",
+        "ai contract",
+        "stake in",
+        "ipo"
+      ]
+    },
+    {
+      "id": "capex",
+      "label": "Capex, data centers and chips",
+      "assumption": "Capex, D&A and COGS (leases)",
+      "weight": 3,
+      "patterns": [
+        "capex",
+        "capital expenditure",
+        "capital spending",
+        "data cent(er|re)",
+        "gigawatt",
+        "\\bgw\\b",
+        "lease",
+        "\\bgpu",
+        "nvidia",
+        "maia",
+        "cobalt",
+        "chip",
+        "power purchase",
+        "nuclear"
+      ]
+    },
+    {
+      "id": "capital",
+      "label": "M&A and capital structure",
+      "assumption": "Equity bridge (debt, cash, share count)",
+      "weight": 3,
+      "patterns": [
+        "acquire",
+        "acquisition",
+        "to buy ",
+        "merger",
+        "bond sale",
+        "debt offering",
+        "buyback",
+        "repurchase",
+        "dividend",
+        "divest",
+        "spin.?off"
+      ]
+    },
+    {
+      "id": "regulation",
+      "label": "Regulation and legal",
+      "assumption": "Growth haircuts and risk",
+      "weight": 3,
+      "patterns": [
+        "antitrust",
+        "\\bftc\\b",
+        "\\bdoj\\b",
+        "european commission",
+        "\\beu\\b.*(probe|fine|investigat)",
+        "lawsuit",
+        "sued",
+        "sues",
+        "probe",
+        "investigation",
+        "moratorium",
+        "permit",
+        "grid connection",
+        "export control",
+        "tariff"
+      ]
+    },
+    {
+      "id": "m365",
+      "label": "Microsoft 365 and Copilot pricing",
+      "assumption": "Productivity revenue growth",
+      "weight": 2,
+      "patterns": [
+        "microsoft 365",
+        "\\bm365\\b",
+        "office 365",
+        "copilot",
+        "price increase",
+        "seats",
+        "credits",
+        "copilot pricing",
+        "pricing change"
+      ]
+    },
+    {
+      "id": "margins",
+      "label": "Costs and headcount",
+      "assumption": "Opex and operating margin",
+      "weight": 2,
+      "patterns": [
+        "layoff",
+        "job cuts",
+        "restructuring",
+        "headcount",
+        "voluntary exit",
+        "margin",
+        "cost cut"
+      ]
+    },
+    {
+      "id": "reliability",
+      "label": "Outages and security",
+      "assumption": "Churn and customer credits risk",
+      "weight": 2,
+      "patterns": [
+        "outage",
+        "\\bdown\\b for",
+        "breach",
+        "hack",
+        "vulnerabilit",
+        "zero.?day",
+        "cyberattack",
+        "service credits"
+      ]
+    },
+    {
+      "id": "street",
+      "label": "Analyst coverage",
+      "assumption": "Consensus target (context only)",
+      "weight": 1,
+      "patterns": [
+        "upgrade",
+        "downgrade",
+        "price target",
+        "reiterat",
+        "overweight",
+        "underweight",
+        "outperform",
+        "initiates coverage"
+      ]
+    }
+  ],
+  "noise_patterns": [
+    "stocks? to buy",
+    "should you buy",
+    "is it too late",
+    "millionaire",
+    "prediction:",
+    "better buy",
+    "could soar",
+    "here'?s why",
+    "top \\d+ stocks",
+    "\\bvs\\.? ",
+    "retire",
+    "passive income",
+    "if you (had )?invested",
+    "how to (fix|install|use|enable)",
+    "review:",
+    "deal alert",
+    "xbox game pass adds",
+    "surface .* (review|deal)"
+  ],
+  "thresholds": {
+    "high": 6,
+    "medium": 3.5
+  }
+}
