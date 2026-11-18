@@ -128,7 +128,8 @@ STOP = set("the a an of to in on for and or as at by with from is are was its it
 
 
 def tokens(t):
-    return {w for w in norm_title(t).split() if w not in STOP and len(w) > 2}
+    words = re.sub(r"[^a-z0-9$]+", " ", t.lower().replace("\u2019", "").replace("'", "")).split()
+    return {w for w in words if w not in STOP and len(w) > 2}
 
 
 def score_item(item, company, cfg):
@@ -226,28 +227,35 @@ def build_threads(clusters, co, cfg):
     skip = set(co["aliases"]) | set(cfg.get("thread_stopwords", []))
     for c in clusters:
         c["_tt"] = thread_tokens(c["title"], skip)
-    n = max(len(clusters), 2)
-    df = {}
-    for c in clusters:
-        for w in c["_tt"]:
-            df[w] = df.get(w, 0) + 1
-    idf = lambda w: math.log(n / df[w])
-    need = max(5.0, 1.15 * math.log(n))
+    order = sorted(clusters, key=lambda x: -x["_base"])
+    seeds = order
     threads = []
-    for c in sorted(clusters, key=lambda x: -x["_base"]):
-        hit = None
-        for th in threads:
-            seed = th[0]
-            if abs((c["publishedAt"] - seed["publishedAt"]).total_seconds()) > 72 * 3600:
-                continue
-            shared = c["_tt"] & seed["_tt"]
-            if len(shared) >= 2 and sum(idf(w) for w in shared) >= need and bool(c.get("form")) == bool(seed.get("form")):
-                hit = th
-                break
-        if hit:
-            hit.append(c)
-        else:
-            threads.append([c])
+    for _ in range(4):  # a big story inflates its own word counts, so recount using one headline per story
+        n = max(len(seeds), 2)
+        df = {}
+        for c in seeds:
+            for w in c["_tt"]:
+                df[w] = df.get(w, 0) + 1
+        idf = lambda w: math.log(n / df.get(w, 1))
+        need = max(5.0, 1.15 * math.log(n))
+        threads = []
+        for c in order:
+            hit = None
+            for th in threads:
+                seed = th[0]
+                if abs((c["publishedAt"] - seed["publishedAt"]).total_seconds()) > 72 * 3600:
+                    continue
+                shared = c["_tt"] & seed["_tt"]
+                if len(shared) >= 2 and sum(idf(w) for w in shared) >= need and bool(c.get("form")) == bool(seed.get("form")):
+                    hit = th
+                    break
+            if hit:
+                hit.append(c)
+            else:
+                threads.append([c])
+        if len(threads) == len(seeds):
+            break
+        seeds = [th[0] for th in threads]
     return threads
 
 
@@ -307,7 +315,7 @@ def build(cfg, fetch=http_get, now=None):
     old = load(DATA / "news.json", {"items": []})
     by_id = {i["id"]: i for i in old.get("items", [])}
     status = {"updatedAt": iso(now), "sources": [], "prices": load(DATA / "status.json", {}).get("prices", {})}
-    fresh, absorbed, sector_cache = [], set(), {}
+    fresh, absorbed, sector_cache, seen_first = [], set(), {}, {}
     for co in cfg["companies"]:
         feeds = [("Google News: " + q, google_news_url(q), "rss") for q in co["queries"]]
         for site in cfg.get("premium_sites", []):
@@ -339,6 +347,18 @@ def build(cfg, fetch=http_get, now=None):
                 status["sources"].append({"name": name, "ticker": co["ticker"], "ok": False, "error": str(e)[:160]})
             time.sleep(0.4)
         raw = [r for r in raw if r["publishedAt"] and r["publishedAt"] > now - timedelta(days=4) and r["publishedAt"] <= now + timedelta(hours=1)]
+        # re-thread recent stored stories together with the new ones so history stays deduplicated
+        for old_it in [i for i in by_id.values() if i["ticker"] == co["ticker"] and not i.get("form")]:
+            when = parse_date(old_it["publishedAt"])
+            if when <= now - timedelta(days=4):
+                continue
+            seen_first[old_it["id"]] = old_it.get("firstSeen", iso(now))
+            entries = [(old_it["title"], old_it["url"], old_it.get("source", ""))]
+            entries += [(r["title"], r["url"], r.get("source", "")) for r in old_it.get("related", [])]
+            for t, u, src in entries:
+                seen_first.setdefault(hashlib.sha1((co["ticker"] + norm_title(t)).encode()).hexdigest()[:14], old_it.get("firstSeen", iso(now)))
+                raw.append({"title": t, "url": u, "source": src, "publishedAt": when, "summary": ""})
+            del by_id[old_it["id"]]
         clusters = []
         for it in cluster(raw, frozenset(co["aliases"])):
             base, drivers, noise = score_item(it, co, cfg)
@@ -364,9 +384,12 @@ def build(cfg, fetch=http_get, now=None):
             sc = seed["_base"] + (len(sources) >= 3) + (len(sources) >= 6) + TIER_ADJ[tier]
             first = min(th, key=lambda c: c["publishedAt"])
             iid = sha(first["title"])
+            firsts = [seen_first[iid]] if iid in seen_first else []
             for c in th:
                 for m in c["_members"]:
                     mid = hashlib.sha1((co["ticker"] + m).encode()).hexdigest()[:14]
+                    if mid in seen_first:
+                        firsts.append(seen_first[mid])
                     if mid != iid:
                         absorbed.add(mid)
             related, rseen = [], {norm_title(show["title"])}
@@ -382,17 +405,17 @@ def build(cfg, fetch=http_get, now=None):
                           "publishedAt": iso(max(c["publishedAt"] for c in th)), "summary": seed.get("summary", ""),
                           "drivers": seed["_drivers"], "score": round(sc, 1), "materiality": level(sc, cfg),
                           "form": seed.get("form", ""), "tier": tier, "scoreTitle": seed["title"],
-                          "paywall": any(p in show["source"].lower() for p in pay), "related": related[:10]})
+                          "paywall": any(p in show["source"].lower() for p in pay), "related": related[:10],
+                          "firstSeen": min(firsts) if firsts else iso(now)})
         try:
             status["prices"][co["ticker"]] = fetch_price(co["ticker"]) if fetch is http_get else status["prices"].get(co["ticker"], {})
         except Exception as e:
             status["sources"].append({"name": "Price", "ticker": co["ticker"], "ok": False, "error": str(e)[:160]})
     for it in fresh:
         prev = by_id.get(it["id"])
-        if prev:  # keep first-seen time and the widest source list
+        if prev and not it.get("firstSeen"):
             it["firstSeen"] = prev.get("firstSeen", iso(now))
-        else:
-            it["firstSeen"] = iso(now)
+        it.setdefault("firstSeen", iso(now))
         by_id[it["id"]] = it
     for mid in absorbed:
         by_id.pop(mid, None)
