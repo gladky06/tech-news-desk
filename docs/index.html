@@ -83,7 +83,7 @@ svg{display:block;width:100%;overflow:visible}
 .meta{display:flex;gap:4px 12px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin-top:5px}
 .meta .src{color:var(--text);font-weight:500}
 .tag{font-size:11px;font-weight:600;padding:1px 7px;border-radius:5px;background:var(--raised);color:var(--muted)}
-.tag.top{background:var(--brand-soft);color:var(--brand)}.tag.new{background:rgba(52,214,163,.14);color:var(--up)}
+.tag.best{background:var(--brand-soft);color:var(--brand)}.tag.new{background:rgba(52,214,163,.14);color:var(--up)}
 .more{font-size:13px;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
 .more:hover{color:var(--text)}
 .why{font-size:13px;color:var(--muted);margin-top:6px}.why b{color:var(--text);font-weight:500}
@@ -308,7 +308,7 @@ function renderFeed(){
     const body=el("div");
     const a=el("a","t",n.title);a.href=n.url;a.target="_blank";a.rel="noopener";body.append(a);
     const m=el("div","meta");m.append(el("span","src",n.source||"Unknown outlet"));
-    if(n.tier==="top")m.append(el("span","tag top","Top source"));
+    if(n.tier==="top")m.append(el("span","tag best","Top source"));
     if(n.paywall)m.append(el("span","tag","Paywall"));
     m.append(el("span","",ago(n.publishedAt)));
     const rel=n.related||[];
