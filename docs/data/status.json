@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T23:29:54Z",
+ "updatedAt": "2026-11-18T23:32:23Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -53,7 +53,7 @@
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 47
+   "count": 48
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
@@ -83,7 +83,7 @@
    "name": "The Verge",
    "ticker": "MSFT",
    "ok": true,
-   "count": 1
+   "count": 0
   },
   {
    "name": "Ars Technica",
