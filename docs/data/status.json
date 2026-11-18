@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T23:05:38Z",
+ "updatedAt": "2026-11-18T23:09:46Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -46,7 +46,7 @@
    "d1": 0.4,
    "d5": -2.46,
    "m1": -4.43,
-   "ytd": null,
+   "ytd": 5.1,
    "series": [
     {
      "d": "2026-09-17",
