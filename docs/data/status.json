@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T23:15:06Z",
+ "updatedAt": "2026-11-18T23:29:54Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -11,7 +11,7 @@
    "name": "Google News: MSFT stock",
    "ticker": "MSFT",
    "ok": true,
-   "count": 45
+   "count": 46
   },
   {
    "name": "Google News: Microsoft Azure",
@@ -41,7 +41,7 @@
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 46
+   "count": 45
   },
   {
    "name": "Google News: Microsoft on ft.com",
@@ -53,7 +53,7 @@
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 48
+   "count": 47
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
@@ -77,7 +77,7 @@
    "name": "TechCrunch",
    "ticker": "MSFT",
    "ok": true,
-   "count": 1
+   "count": 2
   },
   {
    "name": "The Verge",
