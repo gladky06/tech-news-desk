@@ -73,6 +73,7 @@ svg{display:block;width:100%;overflow:visible}
 .pill{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .pill.high{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .pill.medium{color:var(--blue);border-color:var(--blue)}
+.pill.tier{color:var(--accent);border-color:var(--accent)}
 .pill.new{color:var(--up);border-color:var(--up)}
 .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -291,6 +292,7 @@ function renderFeed(){
     const bd=el("div","badge");bd.append(el("span","pill "+n.materiality,n.materiality==="high"?"High":n.materiality==="medium"?"Medium":"Low"));s.append(bd);
     const a=el("a","t",n.title);a.href=n.url;a.target="_blank";a.rel="noopener";s.append(a);
     const m=el("div","m");m.append(el("span","",n.source||"Unknown source"));
+    if(n.tier==="top")m.append(el("span","pill tier","Top source"));
     if(n.sourceCount>1){const c=el("span","chip","+"+(n.sourceCount-1)+" more");c.title=(n.sources||[]).join(", ");m.append(c)}
     m.append(el("span","num",ago(n.publishedAt)));
     if(new Date(n.firstSeen||n.publishedAt)>S.lastVisit&&S.lastVisit)m.append(el("span","pill new","New"));

@@ -165,6 +165,20 @@ def level(score, cfg):
     return "high" if score >= th["high"] else "medium" if score >= th["medium"] else "low"
 
 
+def tier_of(sources, cfg):
+    """top if any outlet is a primary/top-tier one, low if every outlet is an aggregator."""
+    t = cfg.get("source_tiers", {})
+    names = [s.lower() for s in sources if s]
+    if any(k in n for n in names for k in t.get("top", [])):
+        return "top"
+    if names and all(any(k in n for k in t.get("low", [])) for n in names):
+        return "low"
+    return "mid"
+
+
+TIER_ADJ = {"top": 1.5, "mid": 0, "low": -1.5}
+
+
 def cluster(items, skip=frozenset()):
     """Merges stories with the same or very similar headline. Keeps the earliest, counts sources."""
     items = sorted(items, key=lambda x: x["publishedAt"])
@@ -184,11 +198,13 @@ def cluster(items, skip=frozenset()):
                 break
         if hit:
             hit["_members"].add(norm_title(it["title"]))
+            hit["_alts"].append((it["source"], it["url"], it["title"]))
             if it["source"] and it["source"] not in hit["sources"]:
                 hit["sources"].append(it["source"])
         else:
             it["_tk"] = tk
             it["_members"] = {norm_title(it["title"])}
+            it["_alts"] = [(it["source"], it["url"], it["title"])]
             it["sources"] = [it["source"]] if it["source"] else []
             groups.append(it)
     return groups
@@ -237,10 +253,13 @@ def build(cfg, fetch=http_get, now=None):
     old = load(DATA / "news.json", {"items": []})
     by_id = {i["id"]: i for i in old.get("items", [])}
     status = {"updatedAt": iso(now), "sources": [], "prices": load(DATA / "status.json", {}).get("prices", {})}
-    fresh, absorbed = [], set()
+    fresh, absorbed, sector_cache = [], set(), {}
     for co in cfg["companies"]:
         feeds = [("Google News: " + q, google_news_url(q), "rss") for q in co["queries"]]
+        for site in cfg.get("premium_sites", []):
+            feeds.append(("Google News: %s on %s" % (co["name"], site), google_news_url("%s site:%s" % (co["name"], site)), "rss"))
         feeds += [(u, u, "rss") for u in co.get("feeds", [])]
+        feeds += [(f["name"], f["url"], "sector") for f in cfg.get("sector_feeds", [])]
         if co.get("cik"):
             feeds.append(("SEC EDGAR", sec_url(co["cik"]), "sec"))
         raw = []
@@ -252,9 +271,14 @@ def build(cfg, fetch=http_get, now=None):
                     except Exception:
                         got = fetch_sec_json(co["cik"], co, fetch)
                     data = None
+                elif kind == "sector":
+                    if url not in sector_cache:
+                        sector_cache[url] = parse_feed(fetch(url), default_source=name)
+                    got = [dict(g) for g in sector_cache[url] if any(re.search(r"\b%s\b" % re.escape(a), (g["title"] + " " + g["summary"]).lower()) for a in co["aliases"])]
+                    data = None
                 else:
                     data = fetch(url)
-                got = got if kind == "sec" else parse_feed(data, default_source=co["name"] + " blog" if "Google" not in name else "")
+                got = got if kind in ("sec", "sector") else parse_feed(data, default_source=co["name"] + " blog" if "Google" not in name else "")
                 raw += got
                 status["sources"].append({"name": name, "ticker": co["ticker"], "ok": True, "count": len(got)})
             except Exception as e:
@@ -267,6 +291,14 @@ def build(cfg, fetch=http_get, now=None):
                 sc += 1
             if len(it["sources"]) >= 6:
                 sc += 1
+            tier = tier_of(it["sources"], cfg)
+            sc += TIER_ADJ[tier]
+            if tier == "top":  # show the strongest outlet's link and headline
+                tops = cfg["source_tiers"]["top"]
+                best = next((a for a in it["_alts"] if any(k in a[0].lower() for k in tops)), None)
+                if best:
+                    it["sources"] = [best[0]] + [x for x in it["sources"] if x != best[0]]
+                    it["url"] = best[1]
             if noise or sc < 0:
                 continue  # listicles, how-tos and off-topic stories are dropped
             iid = hashlib.sha1((co["ticker"] + norm_title(it["title"])).encode()).hexdigest()[:14]
@@ -278,7 +310,7 @@ def build(cfg, fetch=http_get, now=None):
                           "source": it["sources"][0] if it["sources"] else "", "sources": it["sources"][:8],
                           "sourceCount": len(it["sources"]), "publishedAt": iso(it["publishedAt"]),
                           "summary": it.get("summary", ""), "drivers": drivers, "score": sc,
-                          "materiality": level(sc, cfg), "form": it.get("form", "")})
+                          "materiality": level(sc, cfg), "form": it.get("form", ""), "tier": tier})
         try:
             status["prices"][co["ticker"]] = fetch_price(co["ticker"]) if fetch is http_get else status["prices"].get(co["ticker"], {})
         except Exception as e:
@@ -301,7 +333,8 @@ def build(cfg, fetch=http_get, now=None):
             continue
         sc, drivers, noise = score_item(it, co, cfg)
         n = it.get("sourceCount", 1)
-        sc += (n >= 3) + (n >= 6)
+        it["tier"] = tier_of(it.get("sources", []), cfg)
+        sc += (n >= 3) + (n >= 6) + TIER_ADJ[it["tier"]]
         if (noise or sc < 0) and not it.get("form"):
             del by_id[it["id"]]
             continue
