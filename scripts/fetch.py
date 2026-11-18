@@ -153,6 +153,8 @@ def score_item(item, company, cfg):
     else:
         score -= 2
     noise = any(re.search(p, title) for p in cfg["noise_patterns"])
+    if not in_title and not item.get("form") and len(drivers) < 2:
+        score = min(score, cfg["thresholds"]["medium"] - 0.5)  # sector story with a single weak link stays low
     if not in_title and not item.get("form"):
         in_text = any(re.search(r"\b%s\b" % re.escape(a), text) for a in company["aliases"])
         sector = cfg.get("sector_pattern") and re.search(cfg["sector_pattern"], title)
@@ -259,7 +261,7 @@ def build_threads(clusters, co, cfg):
     return threads
 
 
-def pick_display(alts, cfg):
+def pick_display(alts, cfg, aliases=()):
     """Best link to show: top-tier and free first, then top-tier paywalled, then the rest."""
     t = cfg.get("source_tiers", {})
     pay = cfg.get("paywalled", [])
@@ -268,7 +270,8 @@ def pick_display(alts, cfg):
         top = any(k in s for k in t.get("top", []))
         low = any(k in s for k in t.get("low", []))
         paid = any(k in s for k in pay)
-        return (0 if top and not paid else 1 if top else 3 if low else 2, -a["base"], a["when"])
+        named = any(re.search(r"\b%s\b" % re.escape(x), a["title"].lower()) for x in aliases)
+        return (0 if named else 1, 0 if top and not paid else 1 if top else 3 if low else 2, -a["base"], a["when"])
     return sorted(alts, key=rank)[0]
 
 
@@ -298,7 +301,7 @@ def price_summary(rows, src):
     prev_year = [c for d, c in rows if d[:4] < year]
     return {"price": last, "date": last_d, "source": src, "d1": chg(1), "d5": chg(5), "m1": chg(21),
             "ytd": round((last / prev_year[-1] - 1) * 100, 2) if prev_year else None,
-            "series": [{"d": d, "c": c} for d, c in rows[-45:]]}
+            "series": [{"d": d, "c": c} for d, c in rows[-130:]]}
 
 
 # ---------- main ----------
@@ -378,7 +381,7 @@ def build(cfg, fetch=http_get, now=None):
                         seen.add(key)
                         alts.append({"source": src, "url": url, "title": title, "base": c["_base"], "when": c["publishedAt"]})
             sources = list(dict.fromkeys(a["source"] for a in alts if a["source"]))
-            show = pick_display(alts, cfg)
+            show = pick_display(alts, cfg, co["aliases"])
             sources = [show["source"]] + [x for x in sources if x != show["source"]] if show["source"] else sources
             tier = tier_of(sources, cfg)
             sc = seed["_base"] + (len(sources) >= 3) + (len(sources) >= 6) + TIER_ADJ[tier]
