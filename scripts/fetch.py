@@ -105,6 +105,19 @@ def parse_sec(xml_bytes, company):
     return [o for o in out if o["url"]]
 
 
+def fetch_sec_json(cik, company, fetch):
+    """Fallback: the JSON API on data.sec.gov."""
+    d = json.loads(fetch("https://data.sec.gov/submissions/CIK%s.json" % cik))["filings"]["recent"]
+    out = []
+    for form, acc, doc, when in zip(d["form"], d["accessionNumber"], d["primaryDocument"], d["acceptanceDateTime"]):
+        if form not in IMPORTANT_FORMS:
+            continue
+        url = "https://www.sec.gov/Archives/edgar/data/%d/%s/%s" % (int(cik), acc.replace("-", ""), doc)
+        out.append({"title": "%s filed %s with the SEC" % (company["name"], form) + " (%s)" % acc, "url": url,
+                    "source": "SEC EDGAR", "publishedAt": parse_date(when), "summary": "", "form": form})
+    return out[:40]
+
+
 # ---------- scoring ----------
 
 def norm_title(t):
@@ -233,8 +246,15 @@ def build(cfg, fetch=http_get, now=None):
         raw = []
         for name, url, kind in feeds:
             try:
-                data = fetch(url)
-                got = parse_sec(data, co) if kind == "sec" else parse_feed(data, default_source=co["name"] + " blog" if "Google" not in name else "")
+                if kind == "sec":
+                    try:
+                        got = parse_sec(fetch(url), co)
+                    except Exception:
+                        got = fetch_sec_json(co["cik"], co, fetch)
+                    data = None
+                else:
+                    data = fetch(url)
+                got = got if kind == "sec" else parse_feed(data, default_source=co["name"] + " blog" if "Google" not in name else "")
                 raw += got
                 status["sources"].append({"name": name, "ticker": co["ticker"], "ok": True, "count": len(got)})
             except Exception as e:
