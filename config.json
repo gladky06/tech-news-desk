@@ -289,7 +289,8 @@
     "stocks? (fall|slide|rise|jump|drop|gain|dip|slip|surge)",
     "\\(msft\\) (stock|surged|faces)",
     "nasdaq:msft\\)$",
-    "valuation is"
+    "valuation is",
+    "announces (protection|support|integration|availability|general availability)"
   ],
   "thresholds": {
     "high": 6,
@@ -375,5 +376,6 @@
       "coinfomania",
       "cryptopolitan"
     ]
-  }
+  },
+  "sector_pattern": "data cent(er|re)|\\bcloud\\b|hyperscaler|ai chips?|\\bgpus?\\b|ai (spending|capex|infrastructure)"
 }

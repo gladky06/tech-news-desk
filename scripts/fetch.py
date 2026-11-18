@@ -152,6 +152,11 @@ def score_item(item, company, cfg):
     else:
         score -= 2
     noise = any(re.search(p, title) for p in cfg["noise_patterns"])
+    if not in_title and not item.get("form"):
+        in_text = any(re.search(r"\b%s\b" % re.escape(a), text) for a in company["aliases"])
+        sector = cfg.get("sector_pattern") and re.search(cfg["sector_pattern"], title)
+        if not in_text and not sector:
+            noise = True  # found only by full-text search and not about the company or its sector
     if noise:
         score -= 4
     if item.get("form"):
