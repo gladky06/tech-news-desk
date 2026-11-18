@@ -13,8 +13,12 @@ UA = "Mozilla/5.0 (compatible; tech-news-desk/1.0; +https://github.com/gladky06/
 ATOM = "{http://www.w3.org/2005/Atom}"
 
 
+SEC_UA = "tech-news-desk gladky06@users.noreply.github.com"
+
+
 def http_get(url, timeout=25):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+    ua = SEC_UA if "sec.gov" in url else UA
+    req = urllib.request.Request(url, headers={"User-Agent": ua, "Accept": "*/*"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read()
 
@@ -107,7 +111,7 @@ def norm_title(t):
     return re.sub(r"[^a-z0-9 ]+", "", t.lower()).strip()
 
 
-STOP = set("the a an of to in on for and or as at by with from is are was its it this that after amid over new says will".split())
+STOP = set("the a an of to in on for and or as at by with from is are was its it this that after amid over new says say said will report reports reported ignite 2026".split())
 
 
 def tokens(t):
@@ -125,7 +129,7 @@ def score_item(item, company, cfg):
     weights = [next(d["weight"] for d in cfg["drivers"] if d["id"] == i) for i in drivers]
     if weights:  # strongest driver counts in full, the rest add half
         score = weights[0] + sum(w * 0.5 for w in weights[1:3])
-    if re.search(r"\$\s?\d+(\.\d+)?\s?(billion|bn|b\b|trillion)", text):
+    if re.search(r"\$\s?\d+(\.\d+)?\s?(billion|bn|b\b)", text):
         score += 2
     elif re.search(r"\$\s?\d+(\.\d+)?\s?(million|m\b)", text):
         score += 0.5
@@ -148,7 +152,7 @@ def level(score, cfg):
     return "high" if score >= th["high"] else "medium" if score >= th["medium"] else "low"
 
 
-def cluster(items):
+def cluster(items, skip=frozenset()):
     """Merges stories with the same or very similar headline. Keeps the earliest, counts sources."""
     items = sorted(items, key=lambda x: x["publishedAt"])
     groups = []
@@ -160,14 +164,18 @@ def cluster(items):
                 continue
             inter = len(tk & g["_tk"])
             union = len(tk | g["_tk"]) or 1
-            if norm_title(it["title"]) == norm_title(g["title"]) or inter / union >= 0.6:
+            core = len((tk & g["_tk"]) - skip)
+            small = min(len(tk - skip), len(g["_tk"] - skip)) or 1
+            if norm_title(it["title"]) == norm_title(g["title"]) or inter / union >= 0.5 or (core >= 3 and core / small >= 0.35):
                 hit = g
                 break
         if hit:
+            hit["_members"].add(norm_title(it["title"]))
             if it["source"] and it["source"] not in hit["sources"]:
                 hit["sources"].append(it["source"])
         else:
             it["_tk"] = tk
+            it["_members"] = {norm_title(it["title"])}
             it["sources"] = [it["source"]] if it["source"] else []
             groups.append(it)
     return groups
@@ -177,14 +185,14 @@ def cluster(items):
 
 def fetch_price(ticker):
     try:
-        url = "https://query1.finance.yahoo.com/v8/finance/chart/%s?range=3mo&interval=1d" % ticker
+        url = "https://query1.finance.yahoo.com/v8/finance/chart/%s?range=1y&interval=1d" % ticker
         res = json.loads(http_get(url))["chart"]["result"][0]
         ts, closes = res["timestamp"], res["indicators"]["quote"][0]["close"]
         rows = [(datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d"), round(c, 2)) for t, c in zip(ts, closes) if c]
         src = "Yahoo Finance"
     except Exception as e1:
         raw = http_get("https://stooq.com/q/d/l/?s=%s.us&i=d" % ticker.lower()).decode()
-        rows = [(r["Date"], round(float(r["Close"]), 2)) for r in csv.DictReader(io.StringIO(raw)) if r.get("Close")][-64:]
+        rows = [(r["Date"], round(float(r["Close"]), 2)) for r in csv.DictReader(io.StringIO(raw)) if r.get("Close")][-260:]
         src = "Stooq"
         if not rows:
             raise RuntimeError("no price rows (%s)" % e1)
@@ -216,7 +224,7 @@ def build(cfg, fetch=http_get, now=None):
     old = load(DATA / "news.json", {"items": []})
     by_id = {i["id"]: i for i in old.get("items", [])}
     status = {"updatedAt": iso(now), "sources": [], "prices": load(DATA / "status.json", {}).get("prices", {})}
-    fresh = []
+    fresh, absorbed = [], set()
     for co in cfg["companies"]:
         feeds = [("Google News: " + q, google_news_url(q), "rss") for q in co["queries"]]
         feeds += [(u, u, "rss") for u in co.get("feeds", [])]
@@ -233,7 +241,7 @@ def build(cfg, fetch=http_get, now=None):
                 status["sources"].append({"name": name, "ticker": co["ticker"], "ok": False, "error": str(e)[:160]})
             time.sleep(0.4)
         raw = [r for r in raw if r["publishedAt"] and r["publishedAt"] > now - timedelta(days=4) and r["publishedAt"] <= now + timedelta(hours=1)]
-        for it in cluster(raw):
+        for it in cluster(raw, frozenset(co["aliases"])):
             sc, drivers, noise = score_item(it, co, cfg)
             if len(it["sources"]) >= 3:
                 sc += 1
@@ -242,6 +250,10 @@ def build(cfg, fetch=http_get, now=None):
             if noise or sc < 0:
                 continue  # listicles, how-tos and off-topic stories are dropped
             iid = hashlib.sha1((co["ticker"] + norm_title(it["title"])).encode()).hexdigest()[:14]
+            for m in it["_members"]:  # ids of headlines folded into this story
+                mid = hashlib.sha1((co["ticker"] + m).encode()).hexdigest()[:14]
+                if mid != iid:
+                    absorbed.add(mid)
             fresh.append({"id": iid, "ticker": co["ticker"], "title": it["title"], "url": it["url"],
                           "source": it["sources"][0] if it["sources"] else "", "sources": it["sources"][:8],
                           "sourceCount": len(it["sources"]), "publishedAt": iso(it["publishedAt"]),
@@ -260,6 +272,20 @@ def build(cfg, fetch=http_get, now=None):
         else:
             it["firstSeen"] = iso(now)
         by_id[it["id"]] = it
+    for mid in absorbed:
+        by_id.pop(mid, None)
+    cos = {c["ticker"]: c for c in cfg["companies"]}
+    for it in list(by_id.values()):
+        co = cos.get(it["ticker"])
+        if not co:
+            continue
+        sc, drivers, noise = score_item(it, co, cfg)
+        n = it.get("sourceCount", 1)
+        sc += (n >= 3) + (n >= 6)
+        if (noise or sc < 0) and not it.get("form"):
+            del by_id[it["id"]]
+            continue
+        it["score"], it["drivers"], it["materiality"] = sc, drivers, level(sc, cfg)
     cutoff = iso(now - timedelta(days=cfg["keep_days"]))
     items = sorted((i for i in by_id.values() if i["publishedAt"] >= cutoff), key=lambda x: x["publishedAt"], reverse=True)[: cfg["max_items"]]
     meta = {"title": cfg["site_title"], "companies": [{"ticker": c["ticker"], "name": c["name"], "model": c.get("model")} for c in cfg["companies"]],

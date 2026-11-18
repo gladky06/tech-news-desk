@@ -65,14 +65,14 @@
       "weight": 4,
       "patterns": [
         "guidance",
-        "outlook",
+        "(raises|cuts|lowers|financial|revenue|full.year|profit|sales) outlook",
         "earnings",
         "quarterly results",
-        "raises forecast",
-        "cuts forecast",
+        "(raises|cuts|lowers) forecast",
         "beats estimates",
         "misses estimates",
-        "fiscal q[1-4]"
+        "fiscal q[1-4]",
+        "\\b10-[kq]\\b"
       ]
     },
     {
@@ -81,7 +81,8 @@
       "assumption": "Intelligent Cloud revenue growth",
       "weight": 3,
       "patterns": [
-        "azure",
+        "azure.{0,25}(revenue|growth|capacity|contract|deal|commitment|demand|backlog|price|outage|region)",
+        "(contract|deal|commitment|spend|capacity).{0,25}azure",
         "cloud revenue",
         "cloud growth",
         "remaining performance obligation",
@@ -104,9 +105,10 @@
         "anthropic",
         "\\bxai\\b",
         "mistral",
+        "bytedance",
         "ai contract",
         "stake in",
-        "ipo"
+        "\\bipo\\b"
       ]
     },
     {
@@ -121,12 +123,13 @@
         "data cent(er|re)",
         "gigawatt",
         "\\bgw\\b",
-        "lease",
-        "\\bgpu",
-        "nvidia",
+        "\\bleases?\\b",
+        "\\bgpus?\\b",
+        "nvidia (supply|chips|deal|order)",
         "maia",
         "cobalt",
-        "chip",
+        "(custom|ai|server|in-house|azure) chips?",
+        "chip (supply|deal|packaging)",
         "power purchase",
         "nuclear"
       ]
@@ -256,7 +259,37 @@
     "review:",
     "deal alert",
     "xbox game pass adds",
-    "surface .* (review|deal)"
+    "surface .* (review|deal)",
+    "^why ",
+    "^how ",
+    "^what ",
+    "^is ",
+    "^should ",
+    "^can ",
+    "\\?$",
+    "could (surprise|hit|reach|be)",
+    "\\$\\d+(\\.\\d+)? ?trillion",
+    "bullish",
+    "bearish",
+    "wall street",
+    "stock (slides|falls|rises|jumps|drops|gains|dips|slips)",
+    "shares (slide|fall|rise|jump|drop|gain|dip|slip)",
+    "(now|generally) available on (microsoft )?azure",
+    "public preview",
+    "expands collaboration",
+    "partners with microsoft",
+    "joins microsoft",
+    "named .* partner",
+    "hands.on",
+    "tips",
+    "opinion",
+    "(on|for) (microsoft )?azure( marketplace| foundry| ai foundry)?$",
+    "lowest price",
+    "\\$\\d+\\.\\d\\d\\b",
+    "stocks? (fall|slide|rise|jump|drop|gain|dip|slip|surge)",
+    "\\(msft\\) (stock|surged|faces)",
+    "nasdaq:msft\\)$",
+    "valuation is"
   ],
   "thresholds": {
     "high": 6,
