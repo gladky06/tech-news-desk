@@ -1,0 +1,18 @@
+{
+  "MSFT": {
+    "date": "2026-11-18",
+    "writtenAt": "2026-11-18T23:55:00Z",
+    "headline": "A reported ByteDance deal helps the Azure story and opens a political risk",
+    "paragraphs": [
+      "The Information reports that Microsoft is close to a deal worth about $500 million to sell more OpenAI models to ByteDance through Azure. ByteDance was already reported in June to spend more than $1 billion a year with Microsoft, so this would be an expansion. If it closes, it supports our Intelligent Cloud growth assumption.",
+      "The same story is the main risk of the week. Reuters reports that the House China committee asked Microsoft for a briefing, and OpenAI is reported to be unhappy that its models are sold to a Chinese company. Restrictions on these sales would put part of that Azure demand at risk and add friction with OpenAI, where the model carries a $210B stake value.",
+      "At Ignite, Microsoft launched cheaper in-house AI models aimed at OpenAI and Anthropic (Reuters). Our read is that lower dependence on OpenAI can help cost of revenue over time, but nothing here changes FY27 numbers yet."
+    ],
+    "watch": [
+      "Whether Microsoft or ByteDance confirms the deal and its size",
+      "Any congressional or export control action on selling US AI models to Chinese firms",
+      "Texas resumed issuing data center air permits (Reuters headline, article not read yet), which bears on our FY28 permitting haircut"
+    ],
+    "note": "Written from the stories this desk collected. The ByteDance deal is reported, not confirmed by Microsoft."
+  }
+}

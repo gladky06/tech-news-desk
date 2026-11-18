@@ -46,7 +46,16 @@ a{color:inherit;text-decoration:none}
 .digest h2{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
 .digest .lead{font-size:19px;line-height:1.45;font-weight:500;letter-spacing:-.01em;margin:0;max-width:62em}
 .digest .lead span{color:var(--muted);font-weight:400}
-.digest ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.read{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);max-width:46em}
+.read h3{margin:0 0 10px;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.read p{margin:0 0 10px;font-size:15.5px;line-height:1.55;color:var(--text)}
+.read h4{margin:16px 0 6px;font-size:13px;font-weight:600;color:var(--muted)}
+.read ol{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.digest .read ol li{display:block;border:0;padding:0 0 0 16px;font-size:14.5px;line-height:1.45;position:relative}
+.read ol li:before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.read p.by{font-size:12.5px;color:var(--faint);margin:14px 0 0}
+.read+h2{margin-top:22px}
+.digest ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
 .digest li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:0 8px;padding:12px 0;border-bottom:1px solid var(--line)}
 .digest li svg{width:18px;height:14px;margin-top:4px}
 .digest li a{font-size:16px;font-weight:600;line-height:1.3}
@@ -196,8 +205,8 @@ function ago(iso){const s=(Date.now()-new Date(iso))/1000;if(s<90)return"just no
 async function load(){
   try{
     const t="?t="+Math.floor(Date.now()/60000);
-    const [n,s]=await Promise.all([fetch("data/news.json"+t).then(r=>r.json()),fetch("data/status.json"+t).then(r=>r.json())]);
-    S.news=n;S.status=s;
+    const [n,s,b]=await Promise.all([fetch("data/news.json"+t).then(r=>r.json()),fetch("data/status.json"+t).then(r=>r.json()),fetch("data/brief.json"+t).then(r=>r.ok?r.json():{}).catch(()=>({}))]);
+    S.news=n;S.status=s;S.brief=b||{};
     if(!S.ticker||!n.meta.companies.some(c=>c.ticker===S.ticker))S.ticker=n.meta.companies[0].ticker;
     render();
   }catch(e){
@@ -236,6 +245,15 @@ function renderDigest(){
     if(bits.length)lead.append(el("span","","It is "+listWords(bits)+"."));
   }
   box.append(lead);
+  const br=(S.brief||{})[S.ticker];
+  if(br&&br.paragraphs&&(Date.now()-new Date(br.writtenAt))<4*864e5){
+    const w=el("div","read");w.append(el("h3","",br.headline||"Daily read"));
+    br.paragraphs.forEach(t=>w.append(el("p","",t)));
+    if(br.watch&&br.watch.length){w.append(el("h4","","What to watch"));const ul=el("ol");br.watch.forEach(t=>ul.append(el("li","",t)));w.append(ul)}
+    w.append(el("p","by","Daily read written by Claude on "+shortD(br.date)+". "+(br.note||"")));
+    box.append(w);
+    box.append(el("h2","","Top stories, last 2 days"));
+  }
   const cut=Date.now()-48*36e5, recent=all.filter(i=>new Date(i.publishedAt)>=cut);
   let top=recent.filter(i=>i.materiality==="high").sort((a,b)=>b.score-a.score).slice(0,3), label="";
   if(!top.length){top=recent.filter(isMat).sort((a,b)=>b.score-a.score).slice(0,2);label=top.length?"Nothing high materiality in the last 2 days. The strongest stories are below.":"No material stories in the last 2 days."}
