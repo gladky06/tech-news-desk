@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T04:08:06Z",
+ "updatedAt": "2026-11-19T13:49:58Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -29,7 +29,7 @@
    "name": "Google News: Microsoft on reuters.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 100
+   "count": 85
   },
   {
    "name": "Google News: Microsoft on bloomberg.com",
@@ -41,25 +41,25 @@
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 48
+   "count": 53
   },
   {
    "name": "Google News: Microsoft on ft.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 33
+   "count": 37
   },
   {
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 81
+   "count": 100
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 20
+   "count": 21
   },
   {
    "name": "https://blogs.microsoft.com/feed/",
