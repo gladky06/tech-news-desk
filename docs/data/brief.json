@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-18",
-    "writtenAt": "2026-11-18T23:55:00Z",
-    "headline": "A reported ByteDance deal helps the Azure story and opens a political risk",
+    "date": "2026-11-19",
+    "writtenAt": "2026-11-19T12:30:24Z",
+    "headline": "Texas restarts data center permits, but it is too early to drop the FY28 haircut",
     "paragraphs": [
-      "The Information reports that Microsoft is close to a deal worth about $500 million to sell more OpenAI models to ByteDance through Azure. ByteDance was already reported in June to spend more than $1 billion a year with Microsoft, so this would be an expansion. If it closes, it supports our Intelligent Cloud growth assumption.",
-      "The same story is the main risk of the week. Reuters reports that the House China committee asked Microsoft for a briefing, and OpenAI is reported to be unhappy that its models are sold to a Chinese company. Restrictions on these sales would put part of that Azure demand at risk and add friction with OpenAI, where the model carries a $210B stake value.",
-      "At Ignite, Microsoft launched cheaper in-house AI models aimed at OpenAI and Anthropic (Reuters). Our read is that lower dependence on OpenAI can help cost of revenue over time, but nothing here changes FY27 numbers yet."
+      "The Texas environmental regulator says it has resumed normal review of data center air permits, ending the pause Governor Abbott ordered in September (Texas Tribune, article read). This touches our FY28 one point growth haircut for Texas and Wyoming permitting. We would not remove it yet. The grid operator's final audit report is due December 10, the article does not say the separate pause on grid connections has ended, and the governor-elect campaigned on keeping approvals paused until new laws pass.",
+      "The ByteDance story moved from report to politics. The chair of the House China committee said on the record that Microsoft should not sell AI services to ByteDance and asked for a briefing (Reuters). The roughly $500 million Azure deal itself is still only reported by The Information, and Microsoft has not commented. No export rule or legal step exists today, so Intelligent Cloud revenue growth is unchanged, but the risk to Chinese demand for OpenAI models on Azure is now more visible.",
+      "Two items are loud but do not change the model. Microsoft and Intel confirmed a long-term agreement for multi-year Xeon supply and Intel packaging for Azure's own chips, with no dollar amounts, volumes or dates, so capex and cost of revenue stay as they are. On the Outlook outage, headlines say Nadella apologized and that customers can request credits (CNBC and Variety, headlines only, articles not read). Credits would touch Productivity revenue growth and operating margin, but nobody has sized them."
     ],
     "watch": [
-      "Whether Microsoft or ByteDance confirms the deal and its size",
-      "Any congressional or export control action on selling US AI models to Chinese firms",
-      "Texas resumed issuing data center air permits (Reuters headline, article not read yet), which bears on our FY28 permitting haircut"
+      "December 10 ERCOT final report and December 17 Texas utility commission meeting, plus what the governor-elect does with permits in January",
+      "Whether Microsoft answers the House China committee, and any move to restrict selling US AI models to Chinese firms through the cloud",
+      "Any Microsoft figure for outage credits, and the reported Canadian class actions (headline only)"
     ],
-    "note": "Written from the stories this desk collected. The ByteDance deal is reported, not confirmed by Microsoft."
+    "note": "Confirmed by the companies: the Intel agreement (joint press release). On the record: the Texas regulator and the House committee chair. Reported only: the ByteDance deal and its size. Outage details and a UK cloud probe headline were not verified, and the UK item may be an old story."
   }
 }
