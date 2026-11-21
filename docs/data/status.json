@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-20T19:14:51Z",
+ "updatedAt": "2026-11-21T00:56:18Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -11,7 +11,7 @@
    "name": "Google News: MSFT stock",
    "ticker": "MSFT",
    "ok": true,
-   "count": 33
+   "count": 31
   },
   {
    "name": "Google News: Microsoft Azure",
@@ -41,25 +41,25 @@
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 59
+   "count": 57
   },
   {
    "name": "Google News: Microsoft on ft.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 33
+   "count": 29
   },
   {
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 68
+   "count": 54
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 14
+   "count": 15
   },
   {
    "name": "https://blogs.microsoft.com/feed/",
@@ -71,7 +71,7 @@
    "name": "CNBC Technology",
    "ticker": "MSFT",
    "ok": true,
-   "count": 0
+   "count": 1
   },
   {
    "name": "TechCrunch",
@@ -95,7 +95,7 @@
    "name": "The Register",
    "ticker": "MSFT",
    "ok": true,
-   "count": 4
+   "count": 5
   },
   {
    "name": "SEC EDGAR",
@@ -106,13 +106,13 @@
  ],
  "prices": {
   "MSFT": {
-   "price": 488.48,
+   "price": 484.52,
    "date": "2026-11-20",
    "source": "Yahoo Finance",
-   "d1": -1.97,
-   "d5": -6.76,
-   "m1": -6.26,
-   "ytd": 1.0,
+   "d1": -2.77,
+   "d5": -7.51,
+   "m1": -7.02,
+   "ytd": 0.19,
    "series": [
     {
      "d": "2026-05-19",
@@ -632,7 +632,7 @@
     },
     {
      "d": "2026-11-20",
-     "c": 488.48
+     "c": 484.52
     }
    ]
   }
