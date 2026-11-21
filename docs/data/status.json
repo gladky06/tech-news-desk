@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-21T08:12:32Z",
+ "updatedAt": "2026-11-21T16:21:50Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -11,55 +11,55 @@
    "name": "Google News: MSFT stock",
    "ticker": "MSFT",
    "ok": true,
-   "count": 30
+   "count": 21
   },
   {
    "name": "Google News: Microsoft Azure",
    "ticker": "MSFT",
    "ok": true,
-   "count": 96
+   "count": 83
   },
   {
    "name": "Google News: Microsoft Copilot OR OpenAI",
    "ticker": "MSFT",
    "ok": true,
-   "count": 84
+   "count": 69
   },
   {
    "name": "Google News: Microsoft on reuters.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 64
+   "count": 68
   },
   {
    "name": "Google News: Microsoft on bloomberg.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 92
+   "count": 93
   },
   {
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 53
+   "count": 56
   },
   {
    "name": "Google News: Microsoft on ft.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 25
+   "count": 13
   },
   {
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 29
+   "count": 27
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 14
+   "count": 13
   },
   {
    "name": "https://blogs.microsoft.com/feed/",
