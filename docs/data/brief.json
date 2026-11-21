@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-20",
-    "writtenAt": "2026-11-20T12:25:24Z",
-    "headline": "Anthropic's IPO puts a reported $47B floor under Azure demand through 2033",
+    "date": "2026-11-21",
+    "writtenAt": "2026-11-21T12:25:19Z",
+    "headline": "Trump floats a tax on overseas data centers, but there is no rule yet to model",
     "paragraphs": [
-      "Anthropic listed on Nasdaq on Thursday after pricing its IPO at $83 a share (Anthropic press release), and Reuters names Microsoft among the investors in a side private placement. GuruFocus, citing the final prospectus, reports that Anthropic must spend at least $47.2 billion on Azure between November 2026 and June 2033 and cannot cancel, and that Microsoft is buying about $1 billion of non-voting shares. We did not read the prospectus ourselves, so treat these figures as reported.",
-      "For the model, this supports Intelligent Cloud revenue growth and does not change it. The floor works out to roughly $7 billion a year, a small share of Azure, and the same report puts Anthropic's floors with Google and Amazon at more than twice that size each. The $210B OpenAI stake value is not affected, and the $1 billion share purchase is too small to matter in the equity bridge.",
-      "The rest is loud but changes nothing today. On the Outlook outage, Nadella told CNBC a hidden bug met an unusual traffic pattern and that Microsoft should have tested for it (quotes read through Business Standard, not CNBC itself), and still nobody has put a number on credits, so Productivity revenue growth and operating margin stay as they are. On ByteDance, the Reuters article now read in full adds only that Microsoft is also reported to be seeking similar deals with other Chinese firms including Alibaba. Microsoft has not commented, and no export rule exists."
+      "Nothing material happened in the last day. The loudest new item is President Trump saying on Friday that US tech companies will face \"a tremendous tax\" if they build AI data centers in other countries (AP). AP reports he gave no details and said he had not yet told his own officials about the plan, and the AP article does not name Microsoft.",
+      "If it ever became a real rule it would touch capex and cost of revenue, and possibly Intelligent Cloud revenue growth, because Microsoft builds a large share of its Azure capacity outside the US. Today there is no rate, no legal mechanism and no date, so no assumption moves. In the same remarks he urged communities to accept data centers and ask developers for payments, which is friendly in tone to the FY28 one point permitting haircut for Texas and Wyoming but is words only.",
+      "The other headlines are older news resurfacing and change nothing. Microsoft and Intel announced a long-term deal on November 18 covering multi-year Xeon chip supply and Intel packaging for Azure's own chips, with no dollar value or term given, so it supports supply behind the capex plan without changing a number. Microsoft's claim that Copilot is cheaper than Claude and ChatGPT is a sales pitch from its Ignite conference based on a study Microsoft paid for (The Next Web, citing Bloomberg), with no price change, so Productivity revenue growth stays as it is."
     ],
     "watch": [
-      "The Anthropic prospectus itself, to confirm the Azure minimum, its yearly schedule, and the terms of Microsoft's share purchase",
-      "Any Microsoft figure for outage credits in the final incident report",
-      "Whether Microsoft briefs the House China committee, and December 10 for the Texas grid operator's final report"
+      "Any written follow-up to the overseas data center tax: an executive order, a Treasury or Commerce action, or a bill, and whether Microsoft comments",
+      "Microsoft's final incident report on the Outlook outage and any figure for customer credits",
+      "Whether Microsoft briefs the House China committee on the reported ByteDance talks, and December 10 for the Texas grid operator's final report"
     ],
-    "note": "Confirmed by Anthropic: the $83 IPO price and the November 19 Nasdaq listing plan. Reported only: the $47.2 billion Azure minimum and Microsoft's $1 billion share purchase (GuruFocus citing the prospectus), Microsoft's place in the private placement (Reuters), and the ByteDance and Alibaba deals (The Information). Nadella's outage remarks are on the record but were read second hand."
+    "note": "Confirmed by the companies: the Intel and Microsoft agreement (joint release read on Intel's site) and the Copilot price pitch (made on stage by a Microsoft executive, read second hand). Reported only: Trump's tax remark is on the record through AP but has no policy behind it, and we could not open the CNBC version. A CNBC headline about a UK cloud competition probe is headline only, article not read, and looks like an old story."
   }
 }
