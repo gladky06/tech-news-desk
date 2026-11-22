@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-21",
-    "writtenAt": "2026-11-21T12:25:19Z",
-    "headline": "Trump floats a tax on overseas data centers, but there is no rule yet to model",
+    "date": "2026-11-22",
+    "writtenAt": "2026-11-22T12:24:35Z",
+    "headline": "Quiet weekend: the ByteDance briefing story is from November 18, nothing new to model",
     "paragraphs": [
-      "Nothing material happened in the last day. The loudest new item is President Trump saying on Friday that US tech companies will face \"a tremendous tax\" if they build AI data centers in other countries (AP). AP reports he gave no details and said he had not yet told his own officials about the plan, and the AP article does not name Microsoft.",
-      "If it ever became a real rule it would touch capex and cost of revenue, and possibly Intelligent Cloud revenue growth, because Microsoft builds a large share of its Azure capacity outside the US. Today there is no rate, no legal mechanism and no date, so no assumption moves. In the same remarks he urged communities to accept data centers and ask developers for payments, which is friendly in tone to the FY28 one point permitting haircut for Texas and Wyoming but is words only.",
-      "The other headlines are older news resurfacing and change nothing. Microsoft and Intel announced a long-term deal on November 18 covering multi-year Xeon chip supply and Intel packaging for Azure's own chips, with no dollar value or term given, so it supports supply behind the capex plan without changing a number. Microsoft's claim that Copilot is cheaper than Claude and ChatGPT is a sales pitch from its Ignite conference based on a study Microsoft paid for (The Next Web, citing Bloomberg), with no price change, so Productivity revenue growth stays as it is."
+      "Nothing material happened in the last day. The top scored item, Reuters on US lawmakers seeking a Microsoft briefing about ByteDance, is the November 18 story showing up again in the feed. In it, the House China committee chairman John Moolenaar asked Microsoft to brief lawmakers on a report by The Information that Microsoft is near a $500 million deal to give ByteDance access to OpenAI models through Azure. Microsoft told Reuters it does not comment on confidential customer negotiations, and no deadline for the briefing was given.",
+      "For the model, a $500 million contract is small next to Intelligent Cloud revenue, so it would not move the growth rate either way. The part worth watching is political: if Congress pushes Microsoft to stop selling AI services to Chinese companies, that is a small limit on Azure demand and a regulation risk, not a number to change today. No deal is confirmed and no rule exists.",
+      "The rest is loud but changes nothing. The Outlook outage of November 12 to 13 is still producing follow-up pieces from CNBC, Barron's and Fortune (headlines only, articles not read), and Microsoft's preliminary report already blamed a faulty Windows fix on its gateway servers, so no new fact touches Productivity revenue growth or operating margin. Startup Fortune reports that OpenAI's GPT-6.2 Sol is rolling out worldwide in Copilot with some usage-based billing for the new models and no change to seat prices. If usage billing spreads it could matter for Productivity revenue growth and cost of revenue, but for now it rests on second-hand summaries of a Microsoft admin notice."
     ],
     "watch": [
-      "Any written follow-up to the overseas data center tax: an executive order, a Treasury or Commerce action, or a bill, and whether Microsoft comments",
-      "Microsoft's final incident report on the Outlook outage and any figure for customer credits",
-      "Whether Microsoft briefs the House China committee on the reported ByteDance talks, and December 10 for the Texas grid operator's final report"
+      "Whether Microsoft agrees to brief the House China committee, and any confirmation or denial of the reported ByteDance and Alibaba talks",
+      "Microsoft's final outage report, which Men's Journal said was due November 20, and any total for service credits, which customers can reportedly claim until December 31",
+      "Microsoft's own wording on usage-based billing for the GPT-6.2 models in Copilot, and whether it extends beyond those models"
     ],
-    "note": "Confirmed by the companies: the Intel and Microsoft agreement (joint release read on Intel's site) and the Copilot price pitch (made on stage by a Microsoft executive, read second hand). Reported only: Trump's tax remark is on the record through AP but has no policy behind it, and we could not open the CNBC version. A CNBC headline about a UK cloud competition probe is headline only, article not read, and looks like an old story."
+    "note": "Confirmed by Microsoft: only its no-comment statement to Reuters on ByteDance and, read second hand through Men's Journal, the outage cause in its preliminary report. Reported only: the ByteDance deal itself (The Information via Reuters, read on Investing.com), the GPT-6.2 Sol rollout and billing terms (Startup Fortune, Microsoft's notice not read), and the CNBC, Barron's and Fortune outage pieces, which are headline only, articles not read."
   }
 }
