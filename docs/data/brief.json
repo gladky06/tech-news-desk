@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-22",
-    "writtenAt": "2026-11-22T12:24:35Z",
-    "headline": "Quiet weekend: the ByteDance briefing story is from November 18, nothing new to model",
+    "date": "2026-11-23",
+    "writtenAt": "2026-11-23T12:25:05Z",
+    "headline": "Trump's threat to tax overseas data centers is only words so far, no model change",
     "paragraphs": [
-      "Nothing material happened in the last day. The top scored item, Reuters on US lawmakers seeking a Microsoft briefing about ByteDance, is the November 18 story showing up again in the feed. In it, the House China committee chairman John Moolenaar asked Microsoft to brief lawmakers on a report by The Information that Microsoft is near a $500 million deal to give ByteDance access to OpenAI models through Azure. Microsoft told Reuters it does not comment on confidential customer negotiations, and no deadline for the briefing was given.",
-      "For the model, a $500 million contract is small next to Intelligent Cloud revenue, so it would not move the growth rate either way. The part worth watching is political: if Congress pushes Microsoft to stop selling AI services to Chinese companies, that is a small limit on Azure demand and a regulation risk, not a number to change today. No deal is confirmed and no rule exists.",
-      "The rest is loud but changes nothing. The Outlook outage of November 12 to 13 is still producing follow-up pieces from CNBC, Barron's and Fortune (headlines only, articles not read), and Microsoft's preliminary report already blamed a faulty Windows fix on its gateway servers, so no new fact touches Productivity revenue growth or operating margin. Startup Fortune reports that OpenAI's GPT-6.2 Sol is rolling out worldwide in Copilot with some usage-based billing for the new models and no change to seat prices. If usage billing spreads it could matter for Productivity revenue growth and cost of revenue, but for now it rests on second-hand summaries of a Microsoft admin notice."
+      "Nothing in the last day changes a model assumption. The one item worth understanding is President Trump's remark at a White House news conference on Friday, November 20, that the US will not allow companies to build data centers in other countries and will put a \"tremendous tax\" on those that do. Newsweek reports he gave no tax rate, no legal basis, no list of companies and no start date, and that he said he had not yet told his own staff.",
+      "Why it could matter: Microsoft builds data centers abroad to serve customers there, so a real tax would raise capex and cost of revenue, or slow overseas capacity and with it Intelligent Cloud revenue growth. Today it is a spoken threat with no order or bill behind it, so it is a risk to track, not a number to change. A separate Reuters exclusive from November 17 says an FCC ban on importing new models of Chinese optical transceivers, a part used inside data centers, is moving ahead. That would touch capex too, but Reuters relies on unnamed sources and gives no cost or date.",
+      "The rest of the feed is loud and old. The ByteDance briefing request is still the November 18 Reuters story, and the Nadella items come from his November 18 interviews. TechCrunch reports he defended the voluntary buyout offered in October to about 60,000 employees, with no terms, uptake or cost disclosed, so there is nothing yet to put through operating margin."
     ],
     "watch": [
-      "Whether Microsoft agrees to brief the House China committee, and any confirmation or denial of the reported ByteDance and Alibaba talks",
-      "Microsoft's final outage report, which Men's Journal said was due November 20, and any total for service credits, which customers can reportedly claim until December 31",
-      "Microsoft's own wording on usage-based billing for the GPT-6.2 models in Copilot, and whether it extends beyond those models"
+      "Any written order, bill or tax rate following Trump's overseas data center remark, and whether Microsoft's foreign projects are named",
+      "A formal FCC step on Chinese optical transceivers, and any estimate of what replacing them costs",
+      "Buyout uptake and any one time charge, which would show up in operating margin"
     ],
-    "note": "Confirmed by Microsoft: only its no-comment statement to Reuters on ByteDance and, read second hand through Men's Journal, the outage cause in its preliminary report. Reported only: the ByteDance deal itself (The Information via Reuters, read on Investing.com), the GPT-6.2 Sol rollout and billing terms (Startup Fortune, Microsoft's notice not read), and the CNBC, Barron's and Fortune outage pieces, which are headline only, articles not read."
+    "note": "Confirmed by Microsoft: nothing new; it declined to comment to both Newsweek and Reuters. Reported only: Trump's remarks and their lack of detail (Newsweek, read on Yahoo; the CNBC and Washington Times articles could not be opened), the transceiver ban (Reuters, unnamed sources, read on Yahoo Finance), and Nadella's buyout comments (TechCrunch); CNBC's Nadella piece on cyber defenses is headline only, article not read."
   }
 }
