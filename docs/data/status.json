@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-24T12:21:45Z",
+ "updatedAt": "2026-11-24T22:43:42Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -11,43 +11,43 @@
    "name": "Google News: MSFT stock",
    "ticker": "MSFT",
    "ok": true,
-   "count": 27
+   "count": 100
   },
   {
    "name": "Google News: Microsoft Azure",
    "ticker": "MSFT",
    "ok": true,
-   "count": 92
+   "count": 76
   },
   {
    "name": "Google News: Microsoft Copilot OR OpenAI",
    "ticker": "MSFT",
    "ok": true,
-   "count": 28
+   "count": 39
   },
   {
    "name": "Google News: Microsoft on reuters.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 13
+   "count": 84
   },
   {
    "name": "Google News: Microsoft on bloomberg.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 86
+   "count": 59
   },
   {
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 67
+   "count": 65
   },
   {
    "name": "Google News: Microsoft on ft.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 11
+   "count": 13
   },
   {
    "name": "Google News: Microsoft on cnbc.com",
@@ -59,7 +59,7 @@
    "name": "Google News: Microsoft on theinformation.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 7
+   "count": 5
   },
   {
    "name": "https://blogs.microsoft.com/feed/",
@@ -71,7 +71,7 @@
    "name": "CNBC Technology",
    "ticker": "MSFT",
    "ok": true,
-   "count": 1
+   "count": 0
   },
   {
    "name": "TechCrunch",
@@ -89,7 +89,7 @@
    "name": "Ars Technica",
    "ticker": "MSFT",
    "ok": true,
-   "count": 0
+   "count": 1
   },
   {
    "name": "The Register",
@@ -106,18 +106,14 @@
  ],
  "prices": {
   "MSFT": {
-   "price": 492.5,
-   "date": "2026-11-23",
+   "price": 496.13,
+   "date": "2026-11-24",
    "source": "Yahoo Finance",
-   "d1": 1.65,
-   "d5": -4.92,
-   "m1": -6.1,
-   "ytd": 1.84,
+   "d1": 0.74,
+   "d5": -2.0,
+   "m1": -6.85,
+   "ytd": 2.59,
    "series": [
-    {
-     "d": "2026-05-20",
-     "c": 421.06
-    },
     {
      "d": "2026-05-21",
      "c": 419.09
@@ -633,6 +629,10 @@
     {
      "d": "2026-11-23",
      "c": 492.5
+    },
+    {
+     "d": "2026-11-24",
+     "c": 496.13
     }
    ]
   }
