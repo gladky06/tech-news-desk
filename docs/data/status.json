@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-24T01:52:00Z",
+ "updatedAt": "2026-11-24T12:21:45Z",
  "sources": [
   {
    "name": "Google News: Microsoft",
@@ -11,55 +11,55 @@
    "name": "Google News: MSFT stock",
    "ticker": "MSFT",
    "ok": true,
-   "count": 100
+   "count": 27
   },
   {
    "name": "Google News: Microsoft Azure",
    "ticker": "MSFT",
    "ok": true,
-   "count": 63
+   "count": 92
   },
   {
    "name": "Google News: Microsoft Copilot OR OpenAI",
    "ticker": "MSFT",
    "ok": true,
-   "count": 54
+   "count": 28
   },
   {
    "name": "Google News: Microsoft on reuters.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 10
+   "count": 13
   },
   {
    "name": "Google News: Microsoft on bloomberg.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 84
+   "count": 86
   },
   {
    "name": "Google News: Microsoft on wsj.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 56
+   "count": 67
   },
   {
    "name": "Google News: Microsoft on ft.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 12
+   "count": 11
   },
   {
    "name": "Google News: Microsoft on cnbc.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 19
+   "count": 22
   },
   {
    "name": "Google News: Microsoft on theinformation.com",
    "ticker": "MSFT",
    "ok": true,
-   "count": 8
+   "count": 7
   },
   {
    "name": "https://blogs.microsoft.com/feed/",
@@ -71,7 +71,7 @@
    "name": "CNBC Technology",
    "ticker": "MSFT",
    "ok": true,
-   "count": 2
+   "count": 1
   },
   {
    "name": "TechCrunch",
@@ -106,18 +106,14 @@
  ],
  "prices": {
   "MSFT": {
-   "price": 484.52,
-   "date": "2026-11-20",
+   "price": 492.5,
+   "date": "2026-11-23",
    "source": "Yahoo Finance",
-   "d1": -2.77,
-   "d5": -7.51,
-   "m1": -7.02,
-   "ytd": 0.19,
+   "d1": 1.65,
+   "d5": -4.92,
+   "m1": -6.1,
+   "ytd": 1.84,
    "series": [
-    {
-     "d": "2026-05-19",
-     "c": 417.42
-    },
     {
      "d": "2026-05-20",
      "c": 421.06
@@ -633,6 +629,10 @@
     {
      "d": "2026-11-20",
      "c": 484.52
+    },
+    {
+     "d": "2026-11-23",
+     "c": 492.5
     }
    ]
   }
