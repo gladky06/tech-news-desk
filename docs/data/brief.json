@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-23",
-    "writtenAt": "2026-11-23T12:25:05Z",
-    "headline": "Trump's threat to tax overseas data centers is only words so far, no model change",
+    "date": "2026-11-24",
+    "writtenAt": "2026-11-24T12:25:17Z",
+    "headline": "Microsoft answers Trump's data center tax threat, but nothing in the model moves",
     "paragraphs": [
-      "Nothing in the last day changes a model assumption. The one item worth understanding is President Trump's remark at a White House news conference on Friday, November 20, that the US will not allow companies to build data centers in other countries and will put a \"tremendous tax\" on those that do. Newsweek reports he gave no tax rate, no legal basis, no list of companies and no start date, and that he said he had not yet told his own staff.",
-      "Why it could matter: Microsoft builds data centers abroad to serve customers there, so a real tax would raise capex and cost of revenue, or slow overseas capacity and with it Intelligent Cloud revenue growth. Today it is a spoken threat with no order or bill behind it, so it is a risk to track, not a number to change. A separate Reuters exclusive from November 17 says an FCC ban on importing new models of Chinese optical transceivers, a part used inside data centers, is moving ahead. That would touch capex too, but Reuters relies on unnamed sources and gives no cost or date.",
-      "The rest of the feed is loud and old. The ByteDance briefing request is still the November 18 Reuters story, and the Nadella items come from his November 18 interviews. TechCrunch reports he defended the voluntary buyout offered in October to about 60,000 employees, with no terms, uptake or cost disclosed, so there is nothing yet to put through operating margin."
+      "Nothing in the last day and a half changes a model assumption. The newest item is Microsoft president Brad Smith on CBS's Face the Nation on Sunday, November 22, answering President Trump's Friday threat to penalize companies that build data centers abroad. Smith said most data centers have to sit close to the customers they serve, \"You can't support Helsinki from New Jersey\", and he announced no change to Microsoft's building plans. The threat still has no rate, order, bill or date, so it stays a risk to watch for capex, cost of revenue and overseas Intelligent Cloud revenue growth, not a number to change.",
+      "On the November 12 Microsoft 365 outage, Smith apologized, said it was not a cyberattack and not linked to AI, and said Microsoft has taken nine fixes with 13 more to come. He also said to be prepared \"for the coming months\", which is a mild caution for the resilience thesis. No customer credits or costs have been disclosed, so nothing goes through Productivity revenue growth or operating margin yet. The Nadella \"perfect storm\" headlines are loud but describe the same outage and add no figure.",
+      "The other high scoring stories are older news resurfacing. The ByteDance briefing request is the November 18 Reuters story, with no deal signed; GeekWire reports Smith expects Microsoft to answer the House committee's questions. The Intel agreement (multi-year Xeon supply and Intel packaging for Microsoft's own chips) was announced by both companies on November 18 with no dollar terms, so capex is unchanged. Secondary outlets say Anthropic's IPO filing shows a commitment of at least $47.2B to Azure through June 2033, which supports Intelligent Cloud revenue growth but was filed on November 10 and is not new."
     ],
     "watch": [
-      "Any written order, bill or tax rate following Trump's overseas data center remark, and whether Microsoft's foreign projects are named",
-      "A formal FCC step on Chinese optical transceivers, and any estimate of what replacing them costs",
-      "Buyout uptake and any one time charge, which would show up in operating margin"
+      "Any written order, bill or tax rate behind Trump's overseas data center threat",
+      "Microsoft's final outage review, and any customer credits or added resilience spending that would touch operating margin",
+      "The House China committee briefing on ByteDance, and whether the reported $500M Azure deal is signed or dropped"
     ],
-    "note": "Confirmed by Microsoft: nothing new; it declined to comment to both Newsweek and Reuters. Reported only: Trump's remarks and their lack of detail (Newsweek, read on Yahoo; the CNBC and Washington Times articles could not be opened), the transceiver ban (Reuters, unnamed sources, read on Yahoo Finance), and Nadella's buyout comments (TechCrunch); CNBC's Nadella piece on cyber defenses is headline only, article not read."
+    "note": "Confirmed by Microsoft: Smith's remarks (CBS transcript, partly read), its outage cause reports, and the Intel agreement (joint release). Reported only: the ByteDance talks (The Information via Reuters and others, no company comment), Anthropic's Azure commitment (secondary summaries of its S-1, filing not opened), and the Rocket training system (NewsBytes); the CNBC Nadella articles, Barron's and 24/7 Wall St. pieces are headline only, articles not read."
   }
 }
