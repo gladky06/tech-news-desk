@@ -1,18 +1,18 @@
 {
   "MSFT": {
-    "date": "2026-11-24",
-    "writtenAt": "2026-11-24T12:25:17Z",
-    "headline": "Microsoft answers Trump's data center tax threat, but nothing in the model moves",
+    "date": "2026-11-25",
+    "writtenAt": "2026-11-25T12:30:01Z",
+    "headline": "Reuters: Microsoft declares internal 'Code Red' on outages, no cost figure yet",
     "paragraphs": [
-      "Nothing in the last day and a half changes a model assumption. The newest item is Microsoft president Brad Smith on CBS's Face the Nation on Sunday, November 22, answering President Trump's Friday threat to penalize companies that build data centers abroad: he said most data centers must sit close to the customers they serve, \"You can't support Helsinki from New Jersey\", and announced no change to Microsoft's building plans. The threat still has no rate, order, bill or date, so it stays a risk to watch for capex, cost of revenue and overseas Intelligent Cloud revenue growth, not a number to change.",
-      "On the November 12 Microsoft 365 outage, Smith apologized, said it was not a cyberattack and not linked to AI, and said Microsoft has made nine fixes with 13 more to come. He also said to be prepared \"for the coming months\", a mild caution for the resilience thesis, but no customer credits or costs have been disclosed, so nothing goes through Productivity revenue growth or operating margin yet. The Nadella \"perfect storm\" headlines are loud, describe the same outage and add no figure.",
-      "The other high scoring stories are older news resurfacing. The ByteDance briefing request is the November 18 Reuters story with no deal signed, and the Intel agreement (multi-year Xeon supply plus Intel packaging for Microsoft's own chips) was announced by both companies that same day with no dollar terms, so capex is unchanged. Secondary outlets say Anthropic's IPO filing of November 10 shows a commitment of at least $47.2B to Azure through June 2033, which supports Intelligent Cloud revenue growth but is not new."
+      "The one new item worth reading is a Reuters exclusive from November 24. Reuters says it reviewed internal memos in which Jason Henderson, who runs Microsoft 365 Core, declared a \"Code Red\" after the November 12 to 13 outage, calling it \"the most customer-impacting incident in the history of Exchange Online\" and setting a goal of fixing future incidents worldwide within an hour. An earlier memo, per Reuters, admitted an urgent fix had taken five to six days to reach every region.",
+      "For the model this is a warning sign for the resilience thesis, not a number to change. The memos as reported give no spending figure, no customer credits and no lost contracts, so Productivity revenue growth and operating margin stay where they are. It does tell you management sees the outage as a real threat to customer trust, and that engineering effort is being pulled toward reliability work.",
+      "The other high scoring stories are loud but change nothing. OpenAI's GPT-6.2 Sol and Astra models arriving in Copilot is a November 20 product update, and secondary outlets say the pricier Astra model is billed by usage, which would support Productivity revenue growth a little if confirmed. The report that Microsoft AI chief Mustafa Suleyman told staff to prepare for losing OpenAI technology traces to The Information on November 19, describes internal remarks only, and sits beside a license Microsoft says runs through 2032, so the $210B OpenAI stake value is untouched. The Brad Smith data center remarks and the CNBC stock piece (dated November 18) are older news resurfacing."
     ],
     "watch": [
-      "Any written order, bill or tax rate behind Trump's overseas data center threat",
-      "Microsoft's final outage review, and any customer credits or added resilience spending that would touch operating margin",
-      "The House China committee briefing on ByteDance, and whether the reported $500M Azure deal is signed or dropped"
+      "Any disclosed cost of the Code Red work, customer credits or lost renewals, which would touch operating margin and Productivity revenue growth",
+      "Microsoft's own post on how GPT-6.2 Sol and Astra are billed inside Microsoft 365 Copilot",
+      "Norway's reported link between energy firm cyberattacks and an Azure API Management flaw, and whether Microsoft responds"
     ],
-    "note": "Confirmed by Microsoft: Smith's remarks (CBS transcript, partly read), its outage cause reports, and the Intel agreement (joint release). Reported only: the ByteDance talks (The Information via Reuters and others, no company comment), Anthropic's Azure commitment (secondary summaries of its S-1, filing not opened), and the Rocket training system (NewsBytes); the CNBC Nadella articles, Barron's and 24/7 Wall St. pieces are headline only, articles not read."
+    "note": "Confirmed by Microsoft: the outage cause (a Windows scaling defect from July, not a cyberattack) and a general statement to Reuters that work continues after service is restored. Reported only: the Code Red memos (Reuters, syndicated copy read; Microsoft did not confirm them), the Copilot model rollout and billing details (Startup Fortune and WindowsForum, Microsoft's post not opened), and the OpenAI contingency remarks (The Information via secondary summaries, no company comment). The Register's Norway article, Barron's and the Nadella security warning pieces are headline only, articles not read."
   }
 }
